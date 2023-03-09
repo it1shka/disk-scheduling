@@ -28,6 +28,7 @@ public class Main {
                 new SCAN(diskSpace),
                 new CircularSCAN(diskSpace),
                 new EarliestDeadlineFirst(diskSpace),
+                new FeasibleDeadlineSCAN(diskSpace),
         };
 
         Arrays.stream(schedulers).forEach(scheduler -> {
@@ -93,6 +94,7 @@ public class Main {
         }
     }
 
+    private static final int deadlineStep = 1000;
     private static void randomizeQueries(DiskQuery[][] queries, int diskSpace) {
         var height = queries.length;
         var width = height > 0 ? queries[0].length : 0;
@@ -104,7 +106,7 @@ public class Main {
                 var withDeadline = random.nextBoolean();
                 DiskQuery query;
                 if (withDeadline) {
-                    var deadline = random.nextInt(100);
+                    var deadline = random.nextInt(deadlineStep * (i + 1)) + deadlineStep * i;
                     query = new DiskQuery(name, position, deadline);
                 } else {
                     query = new DiskQuery(name, position);
